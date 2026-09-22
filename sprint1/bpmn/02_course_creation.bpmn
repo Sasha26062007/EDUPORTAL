@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_CourseCreation" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js" exporterVersion="12.0.0">
+  <bpmn:collaboration id="Collaboration_CourseCreation">
+    <bpmn:participant id="Participant_EduPortal" name="Система ЕдуПортал (Створення курсу)" processRef="Process_CourseCreation" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_CourseCreation" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Course">
+      <bpmn:lane id="Lane_Manager" name="Менеджер курсів">
+        <bpmn:flowNodeRef>Start_Course</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CreateShell</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AuditCourse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_AuditCheck</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_NotifyRework</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Teacher" name="Викладач">
+        <bpmn:flowNodeRef>Gateway_Fork_Content</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AddLectures</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AddAssignments</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AddQuizzes</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AddForum</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Join_Content</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ConfigureEnrollment</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_System" name="Система (LMS)">
+        <bpmn:flowNodeRef>Task_PublishCourse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_CoursePublished</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_Course" name="Отримано заявку на створення курсу">
+      <bpmn:outgoing>Flow_C1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_CreateShell" name="Створити курс у категорії та призначити викладача">
+      <bpmn:incoming>Flow_C1</bpmn:incoming>
+      <bpmn:outgoing>Flow_C2</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DOA_CourseMat">
+        <bpmn:targetRef>DataObjectRef_CourseMat</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:parallelGateway id="Gateway_Fork_Content" name="Паралельне наповнення курсу">
+      <bpmn:incoming>Flow_C2</bpmn:incoming>
+      <bpmn:incoming>Flow_C_Rework</bpmn:incoming>
+      <bpmn:outgoing>Flow_Fork_Lec</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Fork_Ass</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Fork_Quiz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Fork_Forum</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:userTask id="Task_AddLectures" name="Завантажити лекційні ресурси">
+      <bpmn:incoming>Flow_Fork_Lec</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_Lec</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_AddAssignments" name="Створити практичні завдання та дедлайни">
+      <bpmn:incoming>Flow_Fork_Ass</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_Ass</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_AddQuizzes" name="Сформувати банк тестових питань">
+      <bpmn:incoming>Flow_Fork_Quiz</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_Quiz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_AddForum" name="Налаштувати консультаційний форум">
+      <bpmn:incoming>Flow_Fork_Forum</bpmn:incoming>
+      <bpmn:outgoing>Flow_Join_Forum</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:parallelGateway id="Gateway_Join_Content" name="Синхронізація наповнення">
+      <bpmn:incoming>Flow_Join_Lec</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_Ass</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_Quiz</bpmn:incoming>
+      <bpmn:incoming>Flow_Join_Forum</bpmn:incoming>
+      <bpmn:outgoing>Flow_C3</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:userTask id="Task_ConfigureEnrollment" name="Налаштувати самозарахування та кодове слово">
+      <bpmn:incoming>Flow_C3</bpmn:incoming>
+      <bpmn:outgoing>Flow_C4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_AuditCourse" name="Провести перевірку наповнення курсу">
+      <bpmn:incoming>Flow_C4</bpmn:incoming>
+      <bpmn:outgoing>Flow_C5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_AuditCheck" name="Перевірку пройдено?" default="Flow_Audit_No">
+      <bpmn:incoming>Flow_C5</bpmn:incoming>
+      <bpmn:outgoing>Flow_Audit_Yes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Audit_No</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="Task_NotifyRework" name="Надіслати зауваження на доопрацювання">
+      <bpmn:incoming>Flow_Audit_No</bpmn:incoming>
+      <bpmn:outgoing>Flow_C_Rework</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:serviceTask id="Task_PublishCourse" name="Опублікувати курс у загальному каталозі">
+      <bpmn:incoming>Flow_Audit_Yes</bpmn:incoming>
+      <bpmn:outgoing>Flow_C6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="End_CoursePublished" name="Курс доступний для навчання">
+      <bpmn:incoming>Flow_C6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:dataObjectReference id="DataObjectRef_CourseMat" name="Матеріали курсу" dataObjectRef="DO_CourseMat" />
+    <bpmn:dataObject id="DO_CourseMat" />
+    <bpmn:sequenceFlow id="Flow_C1" sourceRef="Start_Course" targetRef="Task_CreateShell" />
+    <bpmn:sequenceFlow id="Flow_C2" sourceRef="Task_CreateShell" targetRef="Gateway_Fork_Content" />
+    <bpmn:sequenceFlow id="Flow_Fork_Lec" sourceRef="Gateway_Fork_Content" targetRef="Task_AddLectures" />
+    <bpmn:sequenceFlow id="Flow_Fork_Ass" sourceRef="Gateway_Fork_Content" targetRef="Task_AddAssignments" />
+    <bpmn:sequenceFlow id="Flow_Fork_Quiz" sourceRef="Gateway_Fork_Content" targetRef="Task_AddQuizzes" />
+    <bpmn:sequenceFlow id="Flow_Fork_Forum" sourceRef="Gateway_Fork_Content" targetRef="Task_AddForum" />
+    <bpmn:sequenceFlow id="Flow_Join_Lec" sourceRef="Task_AddLectures" targetRef="Gateway_Join_Content" />
+    <bpmn:sequenceFlow id="Flow_Join_Ass" sourceRef="Task_AddAssignments" targetRef="Gateway_Join_Content" />
+    <bpmn:sequenceFlow id="Flow_Join_Quiz" sourceRef="Task_AddQuizzes" targetRef="Gateway_Join_Content" />
+    <bpmn:sequenceFlow id="Flow_Join_Forum" sourceRef="Task_AddForum" targetRef="Gateway_Join_Content" />
+    <bpmn:sequenceFlow id="Flow_C3" sourceRef="Gateway_Join_Content" targetRef="Task_ConfigureEnrollment" />
+    <bpmn:sequenceFlow id="Flow_C4" sourceRef="Task_ConfigureEnrollment" targetRef="Task_AuditCourse" />
+    <bpmn:sequenceFlow id="Flow_C5" sourceRef="Task_AuditCourse" targetRef="Gateway_AuditCheck" />
+    <bpmn:sequenceFlow id="Flow_Audit_Yes" name="Так" sourceRef="Gateway_AuditCheck" targetRef="Task_PublishCourse" />
+    <bpmn:sequenceFlow id="Flow_Audit_No" name="Ні" sourceRef="Gateway_AuditCheck" targetRef="Task_NotifyRework" />
+    <bpmn:sequenceFlow id="Flow_C_Rework" sourceRef="Task_NotifyRework" targetRef="Gateway_Fork_Content" />
+    <bpmn:sequenceFlow id="Flow_C6" sourceRef="Task_PublishCourse" targetRef="End_CoursePublished" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_2">
+    <bpmndi:BPMNPlane id="BPMNPlane_2" bpmnElement="Collaboration_CourseCreation">
+      <bpmndi:BPMNShape id="Participant_EduPortal_di" bpmnElement="Participant_EduPortal" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1280" height="580" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Manager_di" bpmnElement="Lane_Manager" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1250" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Teacher_di" bpmnElement="Lane_Teacher" isHorizontal="true">
+        <dc:Bounds x="190" y="250" width="1250" height="280" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_System_di" bpmnElement="Lane_System" isHorizontal="true">
+        <dc:Bounds x="190" y="530" width="1250" height="130" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_Course_di" bpmnElement="Start_Course">
+        <dc:Bounds x="232" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CreateShell_di" bpmnElement="Task_CreateShell">
+        <dc:Bounds x="310" y="110" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Fork_Content_di" bpmnElement="Gateway_Fork_Content">
+        <dc:Bounds x="495" y="365" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AddLectures_di" bpmnElement="Task_AddLectures">
+        <dc:Bounds x="580" y="270" width="120" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AddAssignments_di" bpmnElement="Task_AddAssignments">
+        <dc:Bounds x="580" y="330" width="120" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AddQuizzes_di" bpmnElement="Task_AddQuizzes">
+        <dc:Bounds x="580" y="390" width="120" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AddForum_di" bpmnElement="Task_AddForum">
+        <dc:Bounds x="580" y="450" width="120" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Join_Content_di" bpmnElement="Gateway_Join_Content">
+        <dc:Bounds x="745" y="365" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConfigureEnrollment_di" bpmnElement="Task_ConfigureEnrollment">
+        <dc:Bounds x="830" y="350" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_AuditCourse_di" bpmnElement="Task_AuditCourse">
+        <dc:Bounds x="830" y="110" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_AuditCheck_di" bpmnElement="Gateway_AuditCheck" isMarkerVisible="true">
+        <dc:Bounds x="1005" y="125" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_NotifyRework_di" bpmnElement="Task_NotifyRework">
+        <dc:Bounds x="1090" y="110" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_PublishCourse_di" bpmnElement="Task_PublishCourse">
+        <dc:Bounds x="1090" y="555" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_CoursePublished_di" bpmnElement="End_CoursePublished">
+        <dc:Bounds x="1262" y="577" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectRef_CourseMat_di" bpmnElement="DataObjectRef_CourseMat">
+        <dc:Bounds x="362" y="15" width="36" height="50" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
