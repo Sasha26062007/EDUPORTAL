@@ -22,7 +22,7 @@
 
   <!-- Start Event Student -->
   <circle cx="248" cy="210" r="18" fill="#ecfdf5" stroke="#10b981" stroke-width="2" />
-  <text x="248" y="248" font-size=\"11\" fill="#334155" text-anchor="middle">Бажання пройти</text>
+  <text x="248" y="248" font-size="11" fill="#334155" text-anchor="middle">Бажання пройти</text>
   <text x="248" y="262" font-size="11" fill="#334155" text-anchor="middle">тестування</text>
 
   <!-- Task Student Request -->
