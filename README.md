@@ -47,7 +47,7 @@
 - [Матриця розподілу розділів SRS 1.0](docs/sprint2/roles/srs-section-allocation.md)
 - [Журнал технічних уточнень із Замовником](docs/sprint2/roles/customer-clarifications.md)
 - [Архітектурна матриця рівнів і типів тестування](docs/sprint2/roles/test-levels-and-types-matrix.md)
-- [Підготовка до теоретичного бліц-опитування](docs/sprint2/roles/blitz-prep-sprint2.md)
+
 
 ---
 
