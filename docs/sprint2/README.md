@@ -48,12 +48,10 @@ docs/
     └── roles/                                      # Профільні інженерні артефакти ролей:
         ├── lead-approval-and-priorities.md         # Акт затвердження реєстру та пріоритетів (Test Lead)
         ├── customer-clarifications.md              # Журнал уточнень із Замовником (Test Lead)
-        ├── demo-scenario.md                        # Похвилинний сценарій публічного захисту Демо (Test Lead)
-        ├── test-levels-and-types-matrix.md         # Архітектурна матриця рівнів та типів (Test Engineer)
+        ├── test-levels-and-types-matrix.md         # Архітектурна матриця рівнів та 24 типів (Test Engineer)
         ├── disputed-defects.md                     # Технічний протокол розгляду спірних питань (Auditor-Opponent)
         ├── customer-questions-and-counterarguments.md # 5 критичних запитань Замовника та відповіді (Auditor-Opponent)
-        ├── test-plan-verification-checklist.md     # Чек-лист верифікації реалістичності тест-плану (Auditor-Opponent)
-        └── blitz-prep-sprint2.md                   # Повна підготовка команди до теоретичного бліцу (12 питань)
+        └── test-plan-verification-checklist.md     # Чек-лист верифікації реалістичності тест-плану (Auditor-Opponent)
 ```
 
 ---
