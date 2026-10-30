@@ -27,8 +27,8 @@ assignees: ''
 <!-- Правильний результат після тих самих кроків на основі вимоги SRS 1.1 із посиланням на ID -->
 
 ### Environment
-- **Demo-стенд:** https://sandbox.moodledemo.net (стан від 20.10.2026)
-- **Браузер:** Google Chrome 129.0.6668.101 (64-bit) / Mozilla Firefox 131.0.2
+- **Demo-стенд:** https://sandbox.moodledemo.net (стан від 21.10.2026)
+- **Браузер:** Google Chrome 130.0.6723.70 (64-bit) / Mozilla Firefox 131.0.3
 - **ОС:** Windows 11 Pro 23H2 (build 22631.4317)
 - **Обліковий запис:** student / teacher / manager / admin
 
