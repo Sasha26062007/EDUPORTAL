@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ua.kpi.tzyapz</groupId>
+  <artifactId>eduportal-module</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  <name>ТЗЯПЗ · Команда EduGuard · Модуль бізнес-логіки та автотести «ЕдуПортал» (Спринт 4)</name>
+  <description>Командний репозиторій автотестів JUnit 5 та Selenium WebDriver 4 для освітньої платформи ЕдуПортал</description>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <junit.version>5.10.2</junit.version>
+    <selenium.version>4.21.0</selenium.version>
+    <!-- За замовчуванням UI-тести з тегом "ui" виключені: mvn test ганяє лише швидкі юніт-тести -->
+    <!-- Для повного запуску включно з UI: mvn test -DexcludedGroups=none -->
+    <excludedGroups>ui</excludedGroups>
+  </properties>
+
+  <dependencies>
+    <!-- JUnit 5 (Jupiter API, Engine, Parameterized Tests) -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Selenium WebDriver 4 (Java bindings + Selenium Manager) -->
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>${selenium.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Maven Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+
+      <!-- Maven Surefire Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <excludedGroups>${excludedGroups}</excludedGroups>
+          <trimStackTrace>false</trimStackTrace>
+          <!-- Передача кодування для коректного виводу кирилиці в звітах -->
+          <argLine>-Dfile.encoding=UTF-8</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

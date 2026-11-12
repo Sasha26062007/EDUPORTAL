@@ -1,0 +1,262 @@
+{
+  "id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "version": "2.0",
+  "name": "EduPortal Automation Suite - Moodle Sandbox",
+  "url": "https://sandbox.moodledemo.net",
+  "tests": [
+    {
+      "id": "t01-login-valid-student",
+      "name": "TC-01_ValidStudentLogin",
+      "commands": [
+        {
+          "id": "c01-01",
+          "comment": "Відкриття сторінки автентифікації Moodle Sandbox",
+          "command": "open",
+          "target": "/login/index.php",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c01-02",
+          "comment": "Встановлення стандартного розміру вікна браузера",
+          "command": "setWindowSize",
+          "target": "1280x900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c01-03",
+          "comment": "Очікування завантаження поля логіну",
+          "command": "waitForElementVisible",
+          "target": "id=username",
+          "targets": [
+            ["id=username", "id"],
+            ["name=username", "name"],
+            ["css=#username", "css:finder"]
+          ],
+          "value": "10000"
+        },
+        {
+          "id": "c01-04",
+          "comment": "Введення логіну студента",
+          "command": "type",
+          "target": "id=username",
+          "targets": [
+            ["id=username", "id"],
+            ["name=username", "name"],
+            ["css=#username", "css:finder"]
+          ],
+          "value": "student"
+        },
+        {
+          "id": "c01-05",
+          "comment": "Введення пароля студента",
+          "command": "type",
+          "target": "id=password",
+          "targets": [
+            ["id=password", "id"],
+            ["name=password", "name"],
+            ["css=#password", "css:finder"]
+          ],
+          "value": "sandbox24"
+        },
+        {
+          "id": "c01-06",
+          "comment": "Натискання кнопки входу",
+          "command": "click",
+          "target": "id=loginbtn",
+          "targets": [
+            ["id=loginbtn", "id"],
+            ["css=#loginbtn", "css:finder"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "c01-07",
+          "comment": "Очікування переходу до кабінету /my/",
+          "command": "waitForElementVisible",
+          "target": "css=.userbutton",
+          "targets": [
+            ["css=.userbutton", "css:finder"]
+          ],
+          "value": "10000"
+        },
+        {
+          "id": "c01-08",
+          "comment": "Перевірка відображення профілю Student User",
+          "command": "assertText",
+          "target": "css=.userbutton .usertext",
+          "targets": [
+            ["css=.userbutton .usertext", "css:finder"]
+          ],
+          "value": "Student User"
+        }
+      ]
+    },
+    {
+      "id": "t02-login-invalid-password",
+      "name": "TC-02_InvalidPasswordShowsError",
+      "commands": [
+        {
+          "id": "c02-01",
+          "comment": "Відкриття сторінки входу",
+          "command": "open",
+          "target": "/login/index.php",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c02-02",
+          "comment": "Встановлення розміру екрана",
+          "command": "setWindowSize",
+          "target": "1280x900",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c02-03",
+          "comment": "Введення логіну student",
+          "command": "type",
+          "target": "id=username",
+          "targets": [
+            ["id=username", "id"],
+            ["css=#username", "css:finder"]
+          ],
+          "value": "student"
+        },
+        {
+          "id": "c02-04",
+          "comment": "Введення невірного пароля",
+          "command": "type",
+          "target": "id=password",
+          "targets": [
+            ["id=password", "id"],
+            ["css=#password", "css:finder"]
+          ],
+          "value": "wrong_password_test"
+        },
+        {
+          "id": "c02-05",
+          "comment": "Клік по кнопці Log in",
+          "command": "click",
+          "target": "id=loginbtn",
+          "targets": [
+            ["id=loginbtn", "id"]
+          ],
+          "value": ""
+        },
+        {
+          "id": "c02-06",
+          "comment": "Очікування появи сповіщення про помилку",
+          "command": "waitForElementVisible",
+          "target": "id=loginerrormessage",
+          "targets": [
+            ["id=loginerrormessage", "id"],
+            ["css=#loginerrormessage", "css:finder"]
+          ],
+          "value": "8000"
+        },
+        {
+          "id": "c02-07",
+          "comment": "Перевірка збереження логіну student у полі введення",
+          "command": "assertValue",
+          "target": "id=username",
+          "targets": [
+            ["id=username", "id"]
+          ],
+          "value": "student"
+        },
+        {
+          "id": "c02-08",
+          "comment": "М'яка перевірка наявності блоку з текстом помилки",
+          "command": "verifyElementPresent",
+          "target": "css=.alert-danger",
+          "targets": [
+            ["css=.alert-danger", "css:finder"]
+          ],
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "t03-course-catalog-navigation",
+      "name": "TC-08_CourseCatalogNavigation",
+      "commands": [
+        {
+          "id": "c03-01",
+          "comment": "Авторизація перед переглядом курсу",
+          "command": "open",
+          "target": "/login/index.php",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c03-02",
+          "comment": "Введення логіну",
+          "command": "type",
+          "target": "id=username",
+          "targets": [["id=username", "id"]],
+          "value": "student"
+        },
+        {
+          "id": "c03-03",
+          "comment": "Введення пароля",
+          "command": "type",
+          "target": "id=password",
+          "targets": [["id=password", "id"]],
+          "value": "sandbox24"
+        },
+        {
+          "id": "c03-04",
+          "comment": "Клік увійти",
+          "command": "click",
+          "target": "id=loginbtn",
+          "targets": [["id=loginbtn", "id"]],
+          "value": ""
+        },
+        {
+          "id": "c03-05",
+          "comment": "Перехід на навчальний курс ID 2",
+          "command": "open",
+          "target": "/course/view.php?id=2",
+          "targets": [],
+          "value": ""
+        },
+        {
+          "id": "c03-06",
+          "comment": "Очікування заголовка курсу",
+          "command": "waitForElementVisible",
+          "target": "css=.page-header-headings h1",
+          "targets": [["css=.page-header-headings h1", "css:finder"]],
+          "value": "10000"
+        },
+        {
+          "id": "c03-07",
+          "comment": "Перевірка заголовка курсу",
+          "command": "assertText",
+          "target": "css=.page-header-headings h1",
+          "targets": [["css=.page-header-headings h1", "css:finder"]],
+          "value": "My first course"
+        }
+      ]
+    }
+  ],
+  "suites": [
+    {
+      "id": "s01-eduportal-suite",
+      "name": "EduPortal Core Scenarios",
+      "persistSession": false,
+      "parallel": false,
+      "timeout": 300,
+      "tests": [
+        "t01-login-valid-student",
+        "t02-login-invalid-password",
+        "t03-course-catalog-navigation"
+      ]
+    }
+  ],
+  "urls": [
+    "https://sandbox.moodledemo.net"
+  ],
+  "plugins": []
+}
