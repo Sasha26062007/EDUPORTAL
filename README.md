@@ -6,13 +6,13 @@
 
 ### Склад команди та розподіл ролей за спринтами (5 осіб)
 
-| Учасник команди | Псевдонім | Роль у Спринті 1 | Роль у Спринті 2 | Роль у Спринті 3 |
-|:---|:---|:---|:---|:---|
-| **Олександр Панайотов** | `5ani0chek` (Sasha26062007) | Інженер з тестування (ІТ) | **Керівник тестування (Test Lead)** | **Скрам-майстер / Рецензент (Scrum Master)** |
-| **Денис Бучинський** | `Denchik` | Керівник тестування + Скрам-майстер (КТ+СМ) | **Тест-аналітик (Test Analyst)** | **Керівник тестування (Test Lead)** |
-| **Володимир Костенко** | `Vov4ik` | Тест-аналітик (ТА) | **Інженер з тестування (Test Engineer)** | **Тест-аналітик (Test Analyst)** |
-| **Олександр Пархоменко** | `ParkhomenkoO` | *(приєднався зі Спринту 2)* | **Аудитор-опонент (Quality Auditor / Opponent)** | **Інженер з тестування (Test Engineer)** |
-| **Олександр Кираківський** | `KyrakivskyiO` | *(приєднався зі Спринту 2)* | **Скрам-майстер / Рецензент (Scrum Master / Reviewer)** | **Аудитор-опонент (Quality Auditor)** |
+| Учасник команди | Псевдонім | Роль у Спринті 1 | Роль у Спринті 2 | Роль у Спринті 3 | Роль у Спринті 4 |
+|:---|:---|:---|:---|:---|:---|
+| **Олександр Панайотов** | `5ani0chek` (Sasha26062007) | Інженер з тестування (ІТ) | **Керівник тестування (Test Lead)** | **Скрам-майстер / Рецензент (Scrum Master)** | **Аудитор-опонент (Quality Auditor / Opponent)** |
+| **Володимир Костенко** | `Vov4ik` (`vov4ik-qa`) | Тест-аналітик (ТА) | **Інженер з тестування (Test Engineer)** | **Тест-аналітик (Test Analyst)** | **Керівник тестування (Test Lead)** |
+| **Денис Бучинський** | `Denchik` | Керівник тестування + Скрам-майстер (КТ+СМ) | **Тест-аналітик (Test Analyst)** | **Керівник тестування (Test Lead)** | **Скрам-майстер / Рецензент (Scrum Master / Reviewer)** |
+| **Олександр Пархоменко** | `Parkhomenko0` | *(приєднався зі Спринту 2)* | **Аудитор-опонент (Quality Auditor / Opponent)** | **Інженер з тестування (Test Engineer)** | **Тест-аналітик (Test Analyst)** |
+| **Олександр Кираківський** | `Kyrakivskyi0` | *(приєднався зі Спринту 2)* | **Скрам-майстер / Рецензент (Scrum Master / Reviewer)** | **Аудитор-опонент (Quality Auditor)** | **Інженер з тестування / SDET (SDET / Test Engineer)** |
 
 ---
 
@@ -21,7 +21,34 @@
 
 ---
 
-## 🚀 Спринт 3: «Тест-кейси та дефекти» (Поточний реліз)
+## 🚀 Спринт 4: «Автоматизація тестування: JUnit 5 та Selenium WebDriver» (Поточний реліз)
+
+**Інкремент якості v4:** Повний автоматизований тестовий комплекс для перевірки бізнес-логіки та UI платформи дистанційного навчання «ЕдуПортал».
+
+### 📊 Презентація до захисту Спринту 4:
+- **[Презентація PowerPoint (docs/sprint4/EDUPORTAL_Sprint4_Presentation.pptx)](docs/sprint4/EDUPORTAL_Sprint4_Presentation.pptx)** — повний 11-слайдовий звіт команди до захисту з архітектурою Page Object Model, пірамідою тестів, статистикою регресії та нотатками спікерів.
+
+### 📌 Основні артефакти Спринту 4:
+1. **[Підсумковий звіт Керівника тестування (docs/sprint4/README.md)](docs/sprint4/README.md)** — паспорт ролі, виконання нормативів, інструкції зі складання та запуску через Maven.
+2. **[Акт аудиту якості тестів та верифікації дефектів (docs/sprint4/audit.md)](docs/sprint4/audit.md)** — незалежний сліпий аудит закладених дефектів та дотримання правила *No Assert Tampering* (автор: Олександр Панайотов).
+3. **[Матриця покриття вимог BL-10..BL-80 (docs/sprint4/coverage-matrix.md)](docs/sprint4/coverage-matrix.md)** та **[Рецензія матриці (docs/sprint4/coverage-matrix-review.md)](docs/sprint4/coverage-matrix-review.md)**.
+4. **[Специфікація автоматизованих сценаріїв UI (docs/sprint4/ui-scenarios.md)](docs/sprint4/ui-scenarios.md)** — опис 8 сценаріїв Selenium WebDriver з локаторами та перевірками.
+5. **[Реєстр закладених дефектів модуля (docs/sprint4/module-defects.md)](docs/sprint4/module-defects.md)** — `MOD-BUG-001`–`MOD-BUG-006` та детальні звіти у [defects/](docs/sprint4/defects/).
+6. **[Звіт SDET про реалізацію автотестів (docs/sprint4/sdet-report.md)](docs/sprint4/sdet-report.md)** та **[Чек-лист DoD верифікації (docs/sprint4/dod-verification-sdet.md)](docs/sprint4/dod-verification-sdet.md)**.
+7. **[Протокол Code Review тестів (docs/sprint4/code-review-protocol.md)](docs/sprint4/code-review-protocol.md)** — 8 критеріїв якості коду тестування.
+8. **[Дошка задач Спринту 4 (docs/sprint4/task-board.md)](docs/sprint4/task-board.md)** — розподіл та статус 25 інженерних задач.
+9. **[Сценарій живого Демо (docs/sprint4/demo-scenario.md)](docs/sprint4/demo-scenario.md)** та **[Підготовка до бліц-опитування (docs/sprint4/blitz-prep-sprint4.md)](docs/sprint4/blitz-prep-sprint4.md)**.
+10. **[Протокол ретроспективи Спринту 4 (docs/sprint4/retro.md)](docs/sprint4/retro.md)** — Start / Stop / Continue.
+11. **[Зведений звіт Surefire (docs/sprint4/surefire-summary.md)](docs/sprint4/surefire-summary.md)**.
+
+### 💻 Автоматизований тестовий код:
+- **Модульні тести (JUnit 5):** [`src/test/java/ua/kpi/tzyapz/eduportal/`](src/test/java/ua/kpi/tzyapz/eduportal/) — `EnrollmentValidatorTest`, `GradeCalculatorTest`, `QuizScorerTest` (64 прогони, 6 очікуваних падінь на закладених дефектах v1).
+- **UI тести (Selenium WebDriver 4 + Page Object Model):** [`src/test/java/ua/kpi/tzyapz/eduportal/ui/`](src/test/java/ua/kpi/tzyapz/eduportal/ui/) — `MoodleLoginUiTest`, `MoodleCourseEnrollmentUiTest`, `MoodleAssignmentUiTest`, `MoodleGradebookUiTest` (11 сценаріїв, 100% GREEN).
+- **Selenium IDE:** [`selenium-ide/eduportal.side`](selenium-ide/eduportal.side) та згенеровані Java-файли в [`selenium-ide/export/`](selenium-ide/export/).
+
+---
+
+## 📦 Спринт 3: «Тест-кейси та дефекти» (Архів інкременту)
 
 **Досьє якості v3:** 30 тест-кейсів, 10 звітів про дефекти (GitHub Issues `#1`–`#10`), повний журнал прогону, сліпий аудит і підписаний DoD.
 
@@ -30,11 +57,11 @@
 2. **[Комплект тест-кейсів (docs/sprint3/test-cases.xlsx)](docs/sprint3/test-cases.xlsx)** — 30 кейсів, аркуші `Test cases`, `Coverage`, `Review`.
 3. **[Журнал прогону (docs/sprint3/execution-log.xlsx)](docs/sprint3/execution-log.xlsx)** — `Run 1` (30 рядків) та `Environment`.
 4. **[Звіти про дефекти (docs/sprint3/bug-reports.md)](docs/sprint3/bug-reports.md)** — `BUG-001..BUG-010` із вкладеннями в [attachments](docs/sprint3/attachments).
-5. **[Акт сліпого аудиту (docs/sprint3/audit.md)](docs/sprint3/audit.md)** — відтворення `BUG-005`, `BUG-002`, `BUG-004`.
+5. **[Акт сліпого аудиту (docs/sprint3/audit.md)](docs/sprint3/audit.md)** — відтворення дефектів, DoD.
 6. **[Дошка задач Спринту 3 (docs/sprint3/task-board.md)](docs/sprint3/task-board.md)** — 25 задач, 5 ролей.
-7. **[Протокол ретроспективи (docs/sprint3/retro-sprint3.md)](docs/sprint3/retro-sprint3.md)** — Start / Stop / Continue.
-8. **[Сценарій Демо (docs/sprint3/demo-script-sprint3.md)](docs/sprint3/demo-script-sprint3.md)** — 10-хвилинний захист.
-9. **[Презентація до захисту Спринту 3](docs/sprint3/EDUPORTAL_Sprint3_Presentation.pptx)**.
+7. **[Протокол ретроспективи (docs/sprint3/retro-sprint3.md)](docs/sprint3/retro-sprint3.md)**.
+8. **[Сценарій Демо (docs/sprint3/demo-script-sprint3.md)](docs/sprint3/demo-script-sprint3.md)**.
+9. **[Презентація до захисту Спринту 3 (docs/sprint3/EDUPORTAL_Sprint3_Presentation.pptx)](docs/sprint3/EDUPORTAL_Sprint3_Presentation.pptx)**.
 
 ---
 
@@ -67,7 +94,6 @@
 - [Матриця розподілу розділів SRS 1.0](docs/sprint2/roles/srs-section-allocation.md)
 - [Журнал технічних уточнень із Замовником](docs/sprint2/roles/customer-clarifications.md)
 - [Архітектурна матриця рівнів і типів тестування](docs/sprint2/roles/test-levels-and-types-matrix.md)
-
 
 ---
 

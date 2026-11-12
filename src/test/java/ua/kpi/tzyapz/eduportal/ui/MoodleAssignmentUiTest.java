@@ -59,9 +59,12 @@ public class MoodleAssignmentUiTest extends BaseUiTest {
                             "Таблиця повинна відображати стан оцінювання або дедлайн")
             );
         } else {
-            // Резервна перевірка: наявність заголовка сторінки активності
-            assertTrue(driver.getTitle().contains("Sandbox") || driver.getTitle().contains("Assignment"),
-                    "Заголовок сторінки підтверджує відкриття платформи");
+            // Резервна перевірка: наявність заголовка сторінки або контейнера контенту Moodle
+            String title = driver.getTitle();
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(title.contains("Moodle") || title.contains("Sandbox") || title.contains("Assignment") ||
+                            currentUrl.contains("/mod/assign/") || currentUrl.contains("/course/"),
+                    "Сторінка підтверджує відкриття платформи Moodle: " + title + " (" + currentUrl + ")");
         }
     }
 

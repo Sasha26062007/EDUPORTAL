@@ -19,7 +19,7 @@ public class LoginPage extends BasePage {
     private final By passwordInput = By.id("password");
     private final By loginButton = By.id("loginbtn");
     private final By guestLoginButton = By.id("loginguestbtn");
-    private final By errorMessageDiv = By.cssSelector("#loginerrormessage, .alert-danger, .login-form-error");
+    private final By errorMessageDiv = By.cssSelector("#loginerrormessage, .alert-danger, .login-form-error, [role='alert'], .loginerrors");
     private final By pageHeading = By.cssSelector("h1.h2, .loginform h1");
 
     public LoginPage(WebDriver driver) {
@@ -44,6 +44,7 @@ public class LoginPage extends BasePage {
         type(usernameInput, username);
         type(passwordInput, password);
         click(loginButton);
+        wait.until(d -> isElementPresent(errorMessageDiv) || d.getCurrentUrl().contains("/login/"));
         return this;
     }
 
