@@ -6,3 +6,8 @@ Thumbs.db
 # Maven
 target/
 *.class
+
+# IDE
+.idea/
+*.iml
+.vscode/

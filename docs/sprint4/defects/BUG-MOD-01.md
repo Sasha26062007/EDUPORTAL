@@ -1,78 +1,47 @@
-# Звіт про дефект модуля бізнес-логіки: BUG-MOD-01
+# Звіт про дефект модуля бізнес-логіки: MOD-BUG-001
 
-**Ідентифікатор дефекту:** `BUG-MOD-01`  
-**Назва:** Відсутність валідації кінцевої дати періоду зарахування (`enrolEnd`) у методі `EnrollmentValidator.withinPeriod()` (порушення вимоги BL-70).  
-**Компонент модуля:** `ua.kpi.tzyapz.eduportal.EnrollmentValidator` (версія модуля: `v1.0.0`)  
-**Пов'язана вимога:** `BL-70` («умови самозарахування: дата у межах періоду зарахування курсу включно з датами початку й кінця»)  
+**Ідентифікатор дефекту:** `MOD-BUG-001`  
+**GitHub Issue:** [#11](https://github.com/Sasha26062007/EDUPORTAL/issues/11)  
+**Назва:** Некоректне визначення оцінки 'A' за шкалою ECTS для граничного підсумку 95.0 балів у методі `GradeCalculator.ectsLetter()` (порушення вимоги BL-20).  
+**Компонент модуля:** `ua.kpi.tzyapz.eduportal.GradeCalculator` (версія модуля: `v1.0.0`)  
+**Пов'язана вимога:** `BL-20` («Шкала ECTS: A ≥ 95.0, B 85.0–94.99...»)  
 **Тест-клас і метод, що фіксує дефект:**  
-`ua.kpi.tzyapz.eduportal.EnrollmentValidatorTest#withinPeriodDayAfterEndMustReturnFalse`  
-**Автор звіту:** Олександр Кираківський (`Kyrakivskyi0`), **Інженер з тестування / SDET**  
+`ua.kpi.tzyapz.eduportal.GradeCalculatorTest#ectsLetterAtBoundary95MustBeA`  
+**Автор звіту:** Олександр Панайотов (`5ani0chek`), **Аудитор-опонент**  
 **Рецензент звіту:** Денис Бучинський (`Denchik`), **Скрам-майстер / Рецензент**  
-**Дата реєстрації:** 10 листопада 2026 року  
-**Мітка в трекері:** `module`, `bl-70`, `bug-v1`  
+**Дата реєстрації:** 13 листопада 2026 року  
+**Мітки в трекері:** `module`, `severity:major`, `priority:P2`, `status:open`  
 
 ---
 
 ## 1. Рівні критичності та терміновості
 
 - **Severity (Критичність):** **Major**.  
-  *Обґрунтування:* Дефект порушує фундаментальну логіку регламенту навчального процесу, дозволяючи студентам несанкціоновано реєструватися на курс після офіційного закриття набору (`today > enrolEnd`), що створює хаос в адмініструванні груп та плануванні викладацького навантаження.
-- **Priority (Пріоритет):** **High**.  
-  *Обґрунтування:* Потрібно виправити валідатор дат у версії v2 модуля до інтеграції компонента самозарахування з веб-інтерфейсом навчального порталу.
+  *Обґрунтування:* Дефект системно спотворює підсумкову академічну оцінку студента на граничній межі найвищого балу ECTS, понижуючи оцінку до «B».
+- **Priority (Пріоритет):** **P2**.  
+  *Обґрунтування:* Підлягає обов'язковому виправленню у наступній версії модуля v2.
 
 ---
 
 ## 2. Тестове середовище (Environment)
 
-- **Модуль бізнес-логіки:** `code/modules/eduportal/v1` (jar: `eduportal-module-1.0.0.jar`)
-- **JDK:** Eclipse Temurin 17.0.11
-- **Середовище запуску:** Apache Maven 3.9.6, JUnit Jupiter 5.10.2
+- **Модуль бізнес-логіки:** `src/main/java/ua/kpi/tzyapz/eduportal` (v1.0.0)
+- **JDK:** Eclipse Temurin 17.0.21
+- **Середовище запуску:** Apache Maven 3.9.9, JUnit Jupiter 5.10.2
 - **Команда відтворення:**  
-  `mvn test -Dtest=EnrollmentValidatorTest#withinPeriodDayAfterEndMustReturnFalse`
+  `mvn test -Dtest=GradeCalculatorTest#ectsLetterAtBoundary95MustBeA`
 
 ---
 
 ## 3. Кроки для відтворення (Steps to Reproduce)
 
-1. Створити об'єкт курсу `Course` з періодом зарахування з `2026-09-01` по `2026-09-30`:
-   ```java
-   Course course = new Course("cs101", "edu2026", 
-       LocalDate.of(2026, 9, 1), LocalDate.of(2026, 9, 30), 25, 15, "prog-basics");
-   ```
-2. Задати поточну дату тестування `today` як `2026-10-01` (точка $N+1$ — перший день після завершення періоду прийому).
-3. Створити екземпляр валідатора `EnrollmentValidator validator = new EnrollmentValidator();`.
-4. Викликати метод `boolean inPeriod = validator.withinPeriod(course, today);`.
-5. Перевірити повернене логічне значення.
+1. Створити екземпляр `GradeCalculator calc = new GradeCalculator();`.
+2. Викликати метод `String letter = calc.ectsLetter(95.00);`.
+3. Перевірити отримане значення.
 
 ---
 
 ## 4. Результати
 
-- **Очікуваний результат (за специфікацією BL-70):**  
-  Оскільки `2026-10-01` пізніше за дату завершення `2026-09-30`, метод повинен повернути `false`. Зарахування поза межами встановленого терміну заборонено.
-- **Фактичний результат (на коді модуля v1):**  
-  Метод повертає `true`.  
-  *Surefire Failure Trace:*  
-  `org.opentest4j.AssertionFailedError: BL-70 вимагає блокування зарахування після завершення періоду enrolEnd ==> expected: <false> but was: <true>`
-
----
-
-## 5. Першопричина дефекту в коді (Root Cause Analysis)
-
-У вихідному файлі `src/main/java/ua/kpi/tzyapz/eduportal/EnrollmentValidator.java` на рядку 35–37 реалізовано:
-```java
-public boolean withinPeriod(Course course, LocalDate today) {
-    return !today.isBefore(course.enrolStart());
-}
-```
-**Аналіз:** Розробник перевірив лише умову, що дата не передує початку періоду (`!today.isBefore(enrolStart)`), але повністю забув додати перевірку кінцевої межі `!today.isAfter(course.enrolEnd())`.
-
----
-
-## 6. Рекомендоване виправлення для версії v2
-
-```java
-public boolean withinPeriod(Course course, LocalDate today) {
-    return !today.isBefore(course.enrolStart()) && !today.isAfter(course.enrolEnd());
-}
-```
+- **Очікуваний результат:** `"A"`.
+- **Фактичний результат у v1:** `"B"`. Тест падає з помилкою `AssertionFailedError: expected: <A> but was: <B>`.

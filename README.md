@@ -4,6 +4,8 @@
 **Продукт:** «ЕдуПортал» (система дистанційного навчання, LMS, Продукт №6)  
 **Команда:** EduGuard (Команда F, група ФБ-44)  
 
+---
+
 ### Склад команди та розподіл ролей за спринтами (5 осіб)
 
 | Учасник команди | Псевдонім | Роль у Спринті 1 | Роль у Спринті 2 | Роль у Спринті 3 | Роль у Спринті 4 |
@@ -16,6 +18,35 @@
 
 ---
 
+## ⚡ Швидкий старт та інструкції викладачу (§8, DoD п.1, п.2)
+
+### 1. Вимоги до тестового середовища
+- **ОС:** Windows 10/11, Linux або macOS.
+- **Java:** JDK 17 або вище (рекомендовано Eclipse Temurin OpenJDK 17). Змінна `JAVA_HOME` має вказувати на JDK 17.
+- **Maven:** Apache Maven 3.9.0 або новіший.
+- **Браузер:** Google Chrome 125+ (для UI-сценаріїв Selenium WebDriver, драйвер управляється автоматично).
+
+### 2. Команди запуску автотестів
+- **Швидкий запуск юніт-тестів бізнес-логіки (DoD п.2):**
+  ```bash
+  mvn test
+  ```
+  *(Властивість `<excludedGroups>ui</excludedGroups>` автоматично виключає браузерні тести: запускаються 64 модульні тести, з яких рівно 6 падають через закладені дефекти модуля v1: MOD-BUG-001..006).*
+
+- **Повний запуск комплексу разом із UI-тестами WebDriver:**
+  ```bash
+  mvn test -DexcludedGroups=none
+  ```
+  *(Виконує 75 тестів: 64 модульні + 11 сценаріїв Selenium WebDriver у реальному браузері. Усі 11 UI-тестів мають статус **PASSED (100% Green)**).*
+
+- **Запуск конкретного тестового класу:**
+  ```bash
+  mvn test -Dtest=GradeCalculatorTest
+  mvn test -Dtest=MoodleLoginUiTest -DexcludedGroups=none
+  ```
+
+---
+
 ## 📑 Загальнокомандна документація
 - **[Статут команди (docs/team/charter.md)](docs/team/charter.md)** — регламенти Scrum, правило «двох аудиторів», Definition of Done та матриця ротації.
 
@@ -23,28 +54,28 @@
 
 ## 🚀 Спринт 4: «Автоматизація тестування: JUnit 5 та Selenium WebDriver» (Поточний реліз)
 
-**Інкремент якості v4:** Повний автоматизований тестовий комплекс для перевірки бізнес-логіки та UI платформи дистанційного навчання «ЕдуПортал».
+**Інкремент якості v4:** Повний автоматизований тестовий комплекс для перевірки бізнес-логіки та веб-інтерфейсу навчальної платформи «ЕдуПортал».
 
 ### 📊 Презентація до захисту Спринту 4:
-- **[Презентація PowerPoint (docs/sprint4/EDUPORTAL_Sprint4_Presentation.pptx)](docs/sprint4/EDUPORTAL_Sprint4_Presentation.pptx)** — повний 11-слайдовий звіт команди до захисту з архітектурою Page Object Model, пірамідою тестів, статистикою регресії та нотатками спікерів.
+- **[Презентація PowerPoint (docs/sprint4/EDUPORTAL_Sprint4_Presentation.pptx)](docs/sprint4/EDUPORTAL_Sprint4_Presentation.pptx)** — повний 11-слайдовий звіт команди до захисту з архітектурою POM, пірамідою тестів, аналізом закладених дефектів та нотатками доповідачів.
 
 ### 📌 Основні артефакти Спринту 4:
-1. **[Підсумковий звіт Керівника тестування (docs/sprint4/README.md)](docs/sprint4/README.md)** — паспорт ролі, виконання нормативів, інструкції зі складання та запуску через Maven.
-2. **[Акт аудиту якості тестів та верифікації дефектів (docs/sprint4/audit.md)](docs/sprint4/audit.md)** — незалежний сліпий аудит закладених дефектів та дотримання правила *No Assert Tampering* (автор: Олександр Панайотов).
-3. **[Матриця покриття вимог BL-10..BL-80 (docs/sprint4/coverage-matrix.md)](docs/sprint4/coverage-matrix.md)** та **[Рецензія матриці (docs/sprint4/coverage-matrix-review.md)](docs/sprint4/coverage-matrix-review.md)**.
-4. **[Специфікація автоматизованих сценаріїв UI (docs/sprint4/ui-scenarios.md)](docs/sprint4/ui-scenarios.md)** — опис 8 сценаріїв Selenium WebDriver з локаторами та перевірками.
-5. **[Реєстр закладених дефектів модуля (docs/sprint4/module-defects.md)](docs/sprint4/module-defects.md)** — `MOD-BUG-001`–`MOD-BUG-006` та детальні звіти у [defects/](docs/sprint4/defects/).
-6. **[Звіт SDET про реалізацію автотестів (docs/sprint4/sdet-report.md)](docs/sprint4/sdet-report.md)** та **[Чек-лист DoD верифікації (docs/sprint4/dod-verification-sdet.md)](docs/sprint4/dod-verification-sdet.md)**.
-7. **[Протокол Code Review тестів (docs/sprint4/code-review-protocol.md)](docs/sprint4/code-review-protocol.md)** — 8 критеріїв якості коду тестування.
-8. **[Дошка задач Спринту 4 (docs/sprint4/task-board.md)](docs/sprint4/task-board.md)** — розподіл та статус 25 інженерних задач.
-9. **[Сценарій живого Демо (docs/sprint4/demo-scenario.md)](docs/sprint4/demo-scenario.md)** та **[Підготовка до бліц-опитування (docs/sprint4/blitz-prep-sprint4.md)](docs/sprint4/blitz-prep-sprint4.md)**.
-10. **[Протокол ретроспективи Спринту 4 (docs/sprint4/retro.md)](docs/sprint4/retro.md)** — Start / Stop / Continue.
-11. **[Зведений звіт Surefire (docs/sprint4/surefire-summary.md)](docs/sprint4/surefire-summary.md)**.
+1. **[Підсумковий звіт Керівника тестування (docs/sprint4/README.md)](docs/sprint4/README.md)** — паспорт ролі, зведена статистика виконання нормативів, структура проєкту та інструкції запуску.
+2. **[Акт аудиту якості автотестів (docs/sprint4/audit.md)](docs/sprint4/audit.md)** — незалежний сліпий аудит закладених дефектів, відтворюваності та дотримання правила *No Assert Tampering* (автор: Олександр Панайотов).
+3. **[Матриця покриття вимог BL-10..BL-80 (docs/sprint4/coverage-matrix.md)](docs/sprint4/coverage-matrix.md)** та **[Рецензія матриці (docs/sprint4/coverage-matrix-review.md)](docs/sprint4/coverage-matrix-review.md)** — 37 тест-методів (64 прогони).
+4. **[Специфікація автоматизованих сценаріїв UI (docs/sprint4/ui-scenarios.md)](docs/sprint4/ui-scenarios.md)** — опис 11 сценаріїв Selenium WebDriver з локаторами, діями та перевірками до кейсів Спринту 3.
+5. **[Протокол фактичного запуску Surefire (docs/sprint4/surefire-summary.md)](docs/sprint4/surefire-summary.md)** — точний вивід Maven Surefire для модульних та UI-прогонів.
+6. **[Реєстр дефектів модуля (docs/sprint4/module-defects.md)](docs/sprint4/module-defects.md)** — закладені дефекти `MOD-BUG-001`–`MOD-BUG-006` у GitHub Issues [#11–#16](https://github.com/Sasha26062007/EDUPORTAL/issues) з міткою `module`.
+7. **[Звіт SDET про реалізацію автотестів (docs/sprint4/sdet-report.md)](docs/sprint4/sdet-report.md)** та **[Чек-лист DoD верифікації (docs/sprint4/dod-verification-sdet.md)](docs/sprint4/dod-verification-sdet.md)**.
+8. **[Протокол Code Review тестів (docs/sprint4/code-review-protocol.md)](docs/sprint4/code-review-protocol.md)** — проходження 8 обов'язкових критеріїв якості коду.
+9. **[Дошка задач Спринту 4 (docs/sprint4/task-board.md)](docs/sprint4/task-board.md)** — розподіл та статус 28 інженерних задач.
+10. **[Сценарій живого Демо (docs/sprint4/demo-scenario.md)](docs/sprint4/demo-scenario.md)** та **[Підготовка до бліц-опитування (docs/sprint4/blitz-prep-sprint4.md)](docs/sprint4/blitz-prep-sprint4.md)**.
+11. **[Протокол ретроспективи Спринту 4 (docs/sprint4/retro.md)](docs/sprint4/retro.md)** — аналіз Start / Stop / Continue.
 
 ### 💻 Автоматизований тестовий код:
-- **Модульні тести (JUnit 5):** [`src/test/java/ua/kpi/tzyapz/eduportal/`](src/test/java/ua/kpi/tzyapz/eduportal/) — `EnrollmentValidatorTest`, `GradeCalculatorTest`, `QuizScorerTest` (64 прогони, 6 очікуваних падінь на закладених дефектах v1).
-- **UI тести (Selenium WebDriver 4 + Page Object Model):** [`src/test/java/ua/kpi/tzyapz/eduportal/ui/`](src/test/java/ua/kpi/tzyapz/eduportal/ui/) — `MoodleLoginUiTest`, `MoodleCourseEnrollmentUiTest`, `MoodleAssignmentUiTest`, `MoodleGradebookUiTest` (11 сценаріїв, 100% GREEN).
-- **Selenium IDE:** [`selenium-ide/eduportal.side`](selenium-ide/eduportal.side) та згенеровані Java-файли в [`selenium-ide/export/`](selenium-ide/export/).
+- **Модульні тести (JUnit 5):** [`src/test/java/ua/kpi/tzyapz/eduportal/`](src/test/java/ua/kpi/tzyapz/eduportal/) — `EnrollmentValidatorTest` (17 методів), `GradeCalculatorTest` (12 методів), `QuizScorerTest` (8 методів). 64 запуски, 6 обґрунтованих падінь на дефектах v1 за правилом *No Assert Tampering*.
+- **UI тести (Selenium WebDriver 4 + Page Object Model):** [`src/test/java/ua/kpi/tzyapz/eduportal/ui/`](src/test/java/ua/kpi/tzyapz/eduportal/ui/) — `MoodleLoginUiTest` (3), `MoodleCourseEnrollmentUiTest` (3), `MoodleAssignmentUiTest` (3), `MoodleGradebookUiTest` (2). Усі 11 сценаріїв 100% Green.
+- **Selenium IDE:** [`selenium-ide/eduportal.side`](selenium-ide/eduportal.side) та експортовані чернетки у [`selenium-ide/export/`](selenium-ide/export/).
 
 ---
 
@@ -78,22 +109,6 @@
 5. **[Таблиця задач спринту (docs/sprint2/tasks.md)](docs/sprint2/tasks.md)** — дошка виконання 21 задачі з перевірками Скрам-майстра.
 6. **[Протокол підсумкової ретроспективи (docs/sprint2/retro-sprint2.md)](docs/sprint2/retro-sprint2.md)** — аналіз у форматі *Start / Stop / Continue*.
 7. **[Повний звіт та навігація Спринту 2 (docs/sprint2/README.md)](docs/sprint2/README.md)**.
-
-### 🔍 Первинні аркуші аудиту (правило 2 аудиторів на розділ):
-- [Аркуш Олександра Панайотова (Lead)](docs/sprint2/audit/independent-audit-sheet-panaiotov.md)
-- [Аркуш Дениса Бучинського (TA)](docs/sprint2/audit/independent-audit-sheet-buchynskyi.md)
-- [Аркуш Володимира Костенка (TE)](docs/sprint2/audit/independent-audit-sheet-kostenko.md)
-- [Аркуш Олександра Пархоменка (Опонент)](docs/sprint2/audit/independent-audit-sheet-parkhomenko.md)
-- [Аркуш Олександра Кираківського (SM)](docs/sprint2/audit/independent-audit-sheet-kyrakivskyi.md)
-
-### 🛠️ Рольові документи та аналітика якості:
-- [Опонування та спірні дефекти](docs/sprint2/roles/disputed-defects.md)
-- [5 контрольних питань Замовника до Демо](docs/sprint2/roles/customer-questions-and-counterarguments.md)
-- [Чек-лист верифікації реалістичності тест-плану](docs/sprint2/roles/test-plan-verification-checklist.md)
-- [Акт затвердження Реєстру та пріоритетів тестування](docs/sprint2/roles/lead-approval-and-priorities.md)
-- [Матриця розподілу розділів SRS 1.0](docs/sprint2/roles/srs-section-allocation.md)
-- [Журнал технічних уточнень із Замовником](docs/sprint2/roles/customer-clarifications.md)
-- [Архітектурна матриця рівнів і типів тестування](docs/sprint2/roles/test-levels-and-types-matrix.md)
 
 ---
 

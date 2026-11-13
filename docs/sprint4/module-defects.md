@@ -4,146 +4,123 @@
 **Проєкт:** Автоматизована система дистанційного навчання «ЕдуПортал» (LMS)  
 **Компонент:** Модуль бізнес-логіки `ua.kpi.tzyapz.eduportal` (версія v1)  
 **Спринт 4:** «Автоматизація: JUnit 5 і Selenium WebDriver»  
-**Тест-аналітик (Reporter):** Олександр Пархоменко (`ParkhomenkoO`), група ФБ-44  
+**Тест-аналітик (Reporter):** Олександр Пархоменко (`Parkhomenko0`), група ФБ-44  
 **Рецензент (Reviewer):** Денис Бучинський (`Denchik`), Скрам-майстер / Рецензент  
-**Дата формування:** 10 листопада 2026 року  
+**Аудитор-опонент:** Олександр Панайотов (`5ani0chek`)  
+**Дата актуалізації:** 13 листопада 2026 року  
 
 ---
 
 ## 1. Загальний огляд виявлених дефектів
 
-Під час запуску набору юніт-тестів JUnit 5 для модуля `code/modules/eduportal/v1` на основі вимог специфікації **SRS (розділ 5 BL)** було виявлено та верифіковано закладені дефекти вихідного коду. Відповідно до §4.9 методичних вказівок, падаючі тести не підганялися під некоректну поведінку програми, а були задокументовані як офіційні звіти про дефекти з міткою `module`.
+Під час виконання набору модульних тестів JUnit 5 для модуля `ua.kpi.tzyapz.eduportal` (версія коду v1) на основі специфікації **SRS 1.1 (розділ 5 BL)** було виявлено, локалізовано та верифіковано **6 закладених дефектів вихідного коду**.
+
+Відповідно до §4.9 та §12 методичних вказівок, падаючі тести не підганялися під некоректну поведінку програми, а були оформлені як офіційні звіти про дефекти у GitHub Issues репозиторію з обов'язковою міткою `module`.
 
 ### Зведена таблиця закладених дефектів модуля версії v1:
-| ID дефекту | Вимога SRS | Клас та метод модуля v1 | Суть розбіжності | Severity | Priority | Статус у v1 |
-|:---:|:---:|:---|:---|:---:|:---:|:---:|
-| **MOD-BUG-001** | **BL-20** | `GradeCalculator.ectsLetter` | Для граничного значення 95.0 балів повертає літеру `"B"` замість `"A"` (`total > 95` замість `>= 95`). | **Major** | **P2** | Open (червоний тест) |
-| **MOD-BUG-002** | **BL-30** | `GradeCalculator.latePenalty` | Розрахунок за формулою складного відсотка `0.9^days` замість лінійного віднімання 10% на добу. | **Major** | **P2** | Open (червоний тест) |
-| **MOD-BUG-003** | **BL-50** | `QuizScorer.questionScore` | Можливість отримання від'ємного балу за питання (відсутнє обмеження `Math.max(0.0, ...)`). | **Major** | **P2** | Open (червоний тест) |
-| **MOD-BUG-004** | **BL-60** | `QuizScorer.score` | Округлення відсотка тесту до цілого числа через `Math.round` замість 1 десяткового знака. | **Normal** | **P3** | Open (червоний тест) |
-| **MOD-BUG-005** | **BL-70** | `EnrollmentValidator.withinPeriod` | Ігнорування дати завершення періоду зарахування (`enrolEnd` не перевіряється). | **Major** | **P2** | Open (червоний тест) |
-| **MOD-BUG-006** | **BL-70** | `EnrollmentValidator.hasCapacity` | Дозвіл запису при повній заповненості курсу (використано оператор `<=` замість `<`). | **Major** | **P2** | Open (червоний тест) |
+| ID дефекту | GitHub Issue | Вимога SRS | Клас та метод модуля v1 | Падаючий автотест JUnit 5 | Severity | Priority | Статус у v1 |
+|:---:|:---:|:---:|:---|:---|:---:|:---:|:---:|
+| **MOD-BUG-001** | [#11](https://github.com/Sasha26062007/EDUPORTAL/issues/11) | **BL-20** | `GradeCalculator.ectsLetter` | `GradeCalculatorTest.ectsLetterAtBoundary95MustBeA` | **Major** | **P2** | Open (red-test) |
+| **MOD-BUG-002** | [#12](https://github.com/Sasha26062007/EDUPORTAL/issues/12) | **BL-30** | `GradeCalculator.latePenalty` | `GradeCalculatorTest.latePenaltyTwoDaysLinearDiscountMustBeEighty` | **Major** | **P2** | Open (red-test) |
+| **MOD-BUG-003** | [#13](https://github.com/Sasha26062007/EDUPORTAL/issues/13) | **BL-50** | `QuizScorer.questionScore` | `QuizScorerTest.questionScoreMultipleChoiceMustNotBeNegative` | **Major** | **P2** | Open (red-test) |
+| **MOD-BUG-004** | [#14](https://github.com/Sasha26062007/EDUPORTAL/issues/14) | **BL-60** | `QuizScorer.score` | `QuizScorerTest.scoreAttemptRoundsToOneDecimalPlace` | **Normal** | **P3** | Open (red-test) |
+| **MOD-BUG-005** | [#15](https://github.com/Sasha26062007/EDUPORTAL/issues/15) | **BL-70** | `EnrollmentValidator.withinPeriod` | `EnrollmentValidatorTest.withinPeriodDayAfterEndMustReturnFalse` | **Critical** | **P1** | Open (red-test) |
+| **MOD-BUG-006** | [#16](https://github.com/Sasha26062007/EDUPORTAL/issues/16) | **BL-70** | `EnrollmentValidator.hasCapacity` | `EnrollmentValidatorTest.hasCapacityWhenCourseIsFullMustReturnFalse` | **Major** | **P2** | Open (red-test) |
 
 ---
 
-## 2. Детальні звіти про дефекти, закріплені за Олександром Пархоменком
-
----
+## 2. Детальні звіти про дефекти модуля v1
 
 ### Звіт про дефект MOD-BUG-001
-
-**ID:** MOD-BUG-001  
-**Заголовок:** `[BUG] Некоректне визначення оцінки 'A' за шкалою ECTS для граничного підсумку 95.0 балів`  
-**Мітки в трекері:** `severity:major`, `priority:P2`, `status:open`, `sprint:4`, `module`  
-**Пов'язана вимога:** SRS розділ 5, вимога **BL-20** («Шкала ECTS»)  
-**Пов'язаний тест:** `ua.kpi.tzyapz.eduportal.GradeCalculatorTest.ectsLetterBoundaries(95.00, "A")`  
-**Автор звіту (Reporter):** Олександр Пархоменко (Тест-аналітик)  
-**Рецензент (Reviewer):** Денис Бучинський (Скрам-майстер / Рецензент)  
-
-#### Опис дефекту (Description)
-При обчисленні літери європейської кредитно-трансферної системи (ECTS) за підсумковим балом дисципліни метод `ectsLetter(double total)` повертає оцінку `"B"` для результату рівно 95.0 балів, хоча згідно з офіційною специфікацією бал 95.0 є нижньою межею найвищої оцінки `"A"`.  
-Причиною є логічна помилка у коді `GradeCalculator.java` (рядок 51): умовний вираз `if (total > 95)` використовує строгу нерівність замість нестрогої `total >= 95`. Внаслідок цього студент, який набрав відмінний бал 95.0, безпідставно понижується в академічному рейтингу до оцінки «дуже добре» (`"B"`).
-
-- **Обґрунтування Severity:** Цей дефект має рівень серйозності Major, оскільки він системно спотворює розрахунок академічної успішності студентів на критичній граничній точці шкали ECTS без аварійного падіння програми.  
-- **Обґрунтування Priority:** Дефекту присвоєно пріоритет P2, оскільки помилка безпосередньо впливає на ключову бізнес-логіку модуля підсумкової атестації та підлягає обов'язковому виправленню у наступній збірці v2.
-
-#### Кроки для відтворення (Steps to reproduce)
-1. Відкрити термінал у кореневій директорії проєкту з модулем `code/modules/eduportal/v1`.
-2. Запустити модульний тест виконання вимоги BL-20 командою:  
-   `mvn test -Dtest=GradeCalculatorTest#ectsLetterBoundaries`  
-   або виконати виклик методу в коді Java:
-   ```java
-   GradeCalculator calc = new GradeCalculator();
-   String result = calc.ectsLetter(95.00);
-   ```
-3. Проаналізувати повернене рядкове значення.
-
-#### Фактичний результат (Actual result)
-Метод повертає значення `"B"`. Тест падає з повідомленням Surefire:  
-`org.opentest4j.AssertionFailedError: expected: <A> but was: <B>`.
-
-#### Очікуваний результат (Expected result)
-Метод повинен повернути значення `"A"` відповідно до специфікації SRS розділу 5 (вимога BL-20: *«Шкала ECTS: A ≥ 95; B 85–94; ... межі трактуються як від включно, до не включно: A — total ≥ 95.00»*).
-
-#### Тестове середовище (Environment)
-- Модуль продукту: `ua.kpi.tzyapz.eduportal` (v1.0.0)
-- Платформа виконання: OpenJDK 17 (Eclipse Temurin 17.0.10)
-- Інструмент збірки: Apache Maven 3.9.6
-- Тестовий фреймворк: JUnit Jupiter 5.10.2 / Surefire 3.2.5
-- ОС: Windows 11 Pro 64-bit
-
-#### Докази та трасування помилки (Attachments)
-```text
-[ERROR] Failures: 
-[ERROR]   GradeCalculatorTest.ectsLetterBoundaries:104 
-  Для підсумку 95.00 очікується літера A, але отримано B ==> 
-  expected: <A> but was: <B>
-```
+* **ID:** MOD-BUG-001 (GitHub Issue [#11](https://github.com/Sasha26062007/EDUPORTAL/issues/11))
+* **Заголовок:** `[MOD-BUG-001] [BL-20] GradeCalculator.ectsLetter: для граничного значення 95.0 повертає 'B' замість 'A'`
+* **Мітки в трекері:** `module`, `severity:major`, `priority:P2`, `status:open`
+* **Пов'язана вимога:** SRS розділ 5, вимога **BL-20** («Шкала ECTS»)
+* **Падаючий автотест:** `ua.kpi.tzyapz.eduportal.GradeCalculatorTest#ectsLetterAtBoundary95MustBeA`
+* **Опис дефекту:** При обчисленні літери шкали ECTS за підсумковим балом метод `ectsLetter(double total)` повертає `"B"` для результату рівно 95.0 балів. За специфікацією SRS BL-20, бал 95.0 є нижньою включною межею оцінки `"A"` ($95.0 \le total \le 100.0$).
+* **Причина в коді:** У `GradeCalculator.java` (рядок 45) використано строгу нерівність `if (total > 95)` замість `>= 95`.
+* **Severity / Priority:** Major / P2 (спотворює підсумкову оцінку студента без аварійного завершення програми).
+* **Команда відтворення:**
+  ```bash
+  mvn test -Dtest=GradeCalculatorTest#ectsLetterAtBoundary95MustBeA
+  ```
 
 ---
 
 ### Звіт про дефект MOD-BUG-002
-
-**ID:** MOD-BUG-002  
-**Заголовок:** `[BUG] Нарахування штрафу за запізнення за формулою складного відсотка замість лінійного віднімання 10% на добу`  
-**Мітки в трекері:** `severity:major`, `priority:P2`, `status:open`, `sprint:4`, `module`  
-**Пов'язана вимога:** SRS розділ 5, вимога **BL-30** («Штраф за запізнення робіт»)  
-**Пов'язаний тест:** `ua.kpi.tzyapz.eduportal.GradeCalculatorTest.latePenaltyLinearCalculation(100.0, 2, 80.00)` та `latePenaltyCappedAtFiftyPercent(100.0, 5, 50.00)`  
-**Автор звіту (Reporter):** Олександр Пархоменко (Тест-аналітик)  
-**Рецензент (Reviewer):** Денис Бучинський (Скрам-майстер / Рецензент)  
-
-#### Опис дефекту (Description)
-При розрахунку штрафних санкцій за несвоєчасно надіслані завдання метод `latePenalty(double score, int daysLate)` застосовує експоненційну формулу геометричної прогресії `score * Math.pow(0.9, cappedDays)` (рядок 83 у `GradeCalculator.java`). Згідно з бізнес-правилом SRS BL-30, штраф є **фіксованим лінійним**: мінус 10% від базового балу за кожен повний день (тобто 1 день = -10%, 2 дні = -20%, 3 дні = -30%, ..., 5 днів і більше = -50%).  
-Внаслідок помилки:
-- При запізненні на 2 дні замість віднімання 20% (оцінка 80.00 балів зі 100) студент отримує $100 \times 0.9^2 = 81.00$ бал (недонарахування штрафу).
-- При запізненні на 5 днів замість максимального штрафу 50% (оцінка 50.00 балів зі 100) студент отримує $100 \times 0.9^5 = 59.05$ балів (штраф занижено майже на 10 балів).
-
-- **Обґрунтування Severity:** Дефект класифіковано як Major, тому що порушується фіксований алгоритм розрахунку академічних штрафів, визначений навчальним регламентом кафедри.  
-- **Обґрунтування Priority:** Пріоритет усунення визначено як P2, оскільки викривлення оцінювання лабораторних робіт вимагає перерахунку підсумкових відомостей перед формуванням семестрового рейтингу.
-
-#### Кроки для відтворення (Steps to reproduce)
-1. Відкрити термінал у кореневій директорії модуля `code/modules/eduportal/v1`.
-2. Запустити автотест командою:  
-   `mvn test -Dtest=GradeCalculatorTest#latePenaltyLinearCalculation`  
-   або викликати метод програмно:
-   ```java
-   GradeCalculator calc = new GradeCalculator();
-   double result2Days = calc.latePenalty(100.0, 2);
-   double result5Days = calc.latePenalty(100.0, 5);
-   ```
-3. Порівняти фактично повернуті числові результати з нормативом SRS BL-30.
-
-#### Фактичний результат (Actual result)
-- Для 2 днів запізнення: повернуто `81.00` балів замість `80.00`.  
-- Для 5 днів запізнення: повернуто `59.05` балів замість `50.00`.  
-Тести завершуються зі статусом FAILURE.
-
-#### Очікуваний результат (Expected result)
-Штраф повинен розраховуватися за лінійною формулою `score * (1.0 - 0.10 * Math.min(daysLate, 5))` із заокругленням до 2 знаків HALF_UP:
-- За 2 дні запізнення: $100.0 \times (1 - 0.20) = 80.00$ балів (SRS BL-30).
-- За 5 днів запізнення: $100.0 \times (1 - 0.50) = 50.00$ балів (SRS BL-30).
-
-#### Тестове середовище (Environment)
-- Модуль продукту: `ua.kpi.tzyapz.eduportal` (v1.0.0)
-- Платформа виконання: OpenJDK 17 (Eclipse Temurin 17.0.10)
-- Інструмент збірки: Apache Maven 3.9.6
-- Тестовий фреймворк: JUnit Jupiter 5.10.2 / Surefire 3.2.5
-- ОС: Windows 11 Pro 64-bit
-
-#### Докази та трасування помилки (Attachments)
-```text
-[ERROR] Failures: 
-[ERROR]   GradeCalculatorTest.latePenaltyLinearCalculation:167
-  Запізнення на 2 дн. для оцінки 100.00 має давати 80.00 б. ==> 
-  expected: <80.0> but was: <81.0>
-[ERROR]   GradeCalculatorTest.latePenaltyCappedAtFiftyPercent:198
-  При запізненні на 5 дн. штраф має бути обмежений 50% ==> 
-  expected: <50.0> but was: <59.05>
-```
+* **ID:** MOD-BUG-002 (GitHub Issue [#12](https://github.com/Sasha26062007/EDUPORTAL/issues/12))
+* **Заголовок:** `[MOD-BUG-002] [BL-30] GradeCalculator.latePenalty: розрахунок за формулою складного відсотка замість лінійного штрафу 10% на добу`
+* **Мітки в трекері:** `module`, `severity:major`, `priority:P2`, `status:open`
+* **Пов'язана вимога:** SRS розділ 5, вимога **BL-30** («Штраф за запізнення робіт»)
+* **Падаючий автотест:** `ua.kpi.tzyapz.eduportal.GradeCalculatorTest#latePenaltyTwoDaysLinearDiscountMustBeEighty`
+* **Опис дефекту:** Метод `latePenalty(double score, int daysLate)` розраховує штраф за формулою геометричної прогресії `score * Math.pow(0.9, cappedDays)`. За бізнес-правилом SRS BL-30, штраф є фіксованим лінійним: мінус 10% за кожен день (2 дні = -20% -> 80.00 балів зі 100, а код повертає $100 \times 0.9^2 = 81.00$).
+* **Причина в коді:** У `GradeCalculator.java` (рядок 58) застосовано експоненційну формулу `score * Math.pow(0.9, daysLate)`.
+* **Severity / Priority:** Major / P2 (порушує затверджений навчальний регламент нарахування штрафів).
+* **Команда відтворення:**
+  ```bash
+  mvn test -Dtest=GradeCalculatorTest#latePenaltyTwoDaysLinearDiscountMustBeEighty
+  ```
 
 ---
 
-## 3. Резолюція рецензента (Reviewer Sign-off)
+### Звіт про дефект MOD-BUG-003
+* **ID:** MOD-BUG-003 (GitHub Issue [#13](https://github.com/Sasha26062007/EDUPORTAL/issues/13))
+* **Заголовок:** `[MOD-BUG-003] [BL-50] QuizScorer.questionScore: можливість отримання від'ємного балу за питання з кількома відповідями`
+* **Мітки в трекері:** `module`, `severity:major`, `priority:P2`, `status:open`
+* **Пов'язана вимога:** SRS розділ 5, вимога **BL-50** («Питання з кількома відповідями: частка правильних мінус частка неправильних, але не менше 0»)
+* **Падаючий автотест:** `ua.kpi.tzyapz.eduportal.QuizScorerTest#questionScoreMultipleChoiceMustNotBeNegative`
+* **Опис дефекту:** У методі `QuizScorer.questionScore` при обчисленні балу за питання з кількома варіантами відповідей відсутнє обмеження знизу 0.0. Коли студент обирає лише неправильні варіанти, повертається від'ємне число (наприклад, -0.5), що порушує SRS BL-50.
+* **Причина в коді:** У `QuizScorer.java` (рядок 42) повертається `correctShare - wrongShare` без виклику `Math.max(0.0, ...)`.
+* **Severity / Priority:** Major / P2 (неприпустимі від'ємні бали за елементи тесту).
+* **Команда відтворення:**
+  ```bash
+  mvn test -Dtest=QuizScorerTest#questionScoreMultipleChoiceMustNotBeNegative
+  ```
 
-- **Рецензент:** Денис Бучинський (Скрам-майстер / Рецензент команди F)  
-- **Вердикт:** Звіти про дефекти MOD-BUG-001 та MOD-BUG-002 оформлені згідно з міжнародним стандартом IEEE 829 та §4.9 методичних вказівок. Наявні прямі перехресні посилання на пункти SRS 1.1 (розділ 5 BL) та модульні тести `GradeCalculatorTest`. Фактичні розбіжності підтверджено протоколами Surefire. Рекомендується до включення у фінальний реліз Досьє якості v4.
+---
+
+### Звіт про дефект MOD-BUG-004
+* **ID:** MOD-BUG-004 (GitHub Issue [#14](https://github.com/Sasha26062007/EDUPORTAL/issues/14))
+* **Заголовок:** `[MOD-BUG-004] [BL-60] QuizScorer.score: округлення результату тесту до цілого числа замість 1 десяткового знака`
+* **Мітки в трекері:** `module`, `severity:normal`, `priority:P3`, `status:open`
+* **Пов'язана вимога:** SRS розділ 5, вимога **BL-60** («Підсумок спроби тесту: округлення до 1 десяткового знака за правилом HALF_UP»)
+* **Падаючий автотест:** `ua.kpi.tzyapz.eduportal.QuizScorerTest#scoreAttemptRoundsToOneDecimalPlace`
+* **Опис дефекту:** Метод `QuizScorer.score` виконує округлення `(double) Math.round(percent)`, відкидаючи дробову частину до цілого числа (33.0 замість 33.3 при результаті $1/3 \times 100$). За SRS BL-60 вимагається округлення до 1 знака після коми за правилом HALF_UP.
+* **Причина в коді:** У `QuizScorer.java` (рядок 63) використано `Math.round(percent)`.
+* **Severity / Priority:** Normal / P3 (похибка форматування відсотка успішності).
+* **Команда відтворення:**
+  ```bash
+  mvn test -Dtest=QuizScorerTest#scoreAttemptRoundsToOneDecimalPlace
+  ```
+
+---
+
+### Звіт про дефект MOD-BUG-005
+* **ID:** MOD-BUG-005 (GitHub Issue [#15](https://github.com/Sasha26062007/EDUPORTAL/issues/15))
+* **Заголовок:** `[MOD-BUG-005] [BL-70] EnrollmentValidator.withinPeriod: ігнорування дати завершення періоду прийому (enrolEnd)`
+* **Мітки в трекері:** `module`, `severity:critical`, `priority:P1`, `status:open`
+* **Пов'язана вимога:** SRS розділ 5, вимога **BL-70** («Умови самозарахування: реєстрація дозволена лише у межах [enrolStart, enrolEnd] включно»)
+* **Падаючий автотест:** `ua.kpi.tzyapz.eduportal.EnrollmentValidatorTest#withinPeriodDayAfterEndMustReturnFalse`
+* **Опис дефекту:** Метод `EnrollmentValidator.withinPeriod` перевіряє тільки умову `!date.isBefore(course.enrolStart())`, не перевіряючи `course.enrolEnd()`. Внаслідок цього студент може зареєструватися на курс після закриття набору (наприклад, 2026-10-01 при дедлайні 2026-09-30).
+* **Причина в коді:** У `EnrollmentValidator.java` (рядок 51) відсутня перевірка кінцевої дати.
+* **Severity / Priority:** Critical / P1 (блокуючий бізнес-дефект, порушує часові рамки прийому).
+* **Команда відтворення:**
+  ```bash
+  mvn test -Dtest=EnrollmentValidatorTest#withinPeriodDayAfterEndMustReturnFalse
+  ```
+
+---
+
+### Звіт про дефект MOD-BUG-006
+* **ID:** MOD-BUG-006 (GitHub Issue [#16](https://github.com/Sasha26062007/EDUPORTAL/issues/16))
+* **Заголовок:** `[MOD-BUG-006] [BL-70] EnrollmentValidator.hasCapacity: дозвіл самозарахування на повністю заповнений курс при enrolled == capacity`
+* **Мітки в трекері:** `module`, `severity:major`, `priority:P2`, `status:open`
+* **Пов'язана вимога:** SRS розділ 5, вимога **BL-70** («Умови самозарахування: на курсі є вільні місця: enrolled < capacity»)
+* **Падаючий автотест:** `ua.kpi.tzyapz.eduportal.EnrollmentValidatorTest#hasCapacityWhenCourseIsFullMustReturnFalse`
+* **Опис дефекту:** Метод `EnrollmentValidator.hasCapacity` використовує нестрогу нерівність `enrolled <= capacity`, дозволяючи реєстрацію 26-го студента при місткості 25 осіб. За SRS BL-70 обов'язковою умовою є наявність вільних місць ($enrolled < capacity$).
+* **Причина в коді:** У `EnrollmentValidator.java` (рядок 58) використано `<= capacity` замість `< capacity`.
+* **Severity / Priority:** Major / P2 (переповнення академічних груп понад ліміт).
+* **Команда відтворення:**
+  ```bash
+  mvn test -Dtest=EnrollmentValidatorTest#hasCapacityWhenCourseIsFullMustReturnFalse
+  ```

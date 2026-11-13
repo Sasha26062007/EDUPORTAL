@@ -1,77 +1,47 @@
-# Звіт про дефект модуля бізнес-логіки: BUG-MOD-02
+# Звіт про дефект модуля бізнес-логіки: MOD-BUG-002
 
-**Ідентифікатор дефекту:** `BUG-MOD-02`  
-**Назва:** Некоректний оператор нестрогого порівняння `<=` у методі `EnrollmentValidator.hasCapacity()`, що дозволяє самозарахування на повністю заповнений курс (порушення вимоги BL-70).  
-**Компонент модуля:** `ua.kpi.tzyapz.eduportal.EnrollmentValidator` (версія модуля: `v1.0.0`)  
-**Пов'язана вимога:** `BL-70` («умови самозарахування: зараховано менше за місткість»)  
+**Ідентифікатор дефекту:** `MOD-BUG-002`  
+**GitHub Issue:** [#12](https://github.com/Sasha26062007/EDUPORTAL/issues/12)  
+**Назва:** Розрахунок штрафу за запізнення за формулою складного відсотка замість лінійного віднімання 10% на добу у методі `GradeCalculator.latePenalty()` (порушення вимоги BL-30).  
+**Компонент модуля:** `ua.kpi.tzyapz.eduportal.GradeCalculator` (версія модуля: `v1.0.0`)  
+**Пов'язана вимога:** `BL-30` («Штраф за запізнення робіт: 10% на добу, максимум 50%»)  
 **Тест-клас і метод, що фіксує дефект:**  
-`ua.kpi.tzyapz.eduportal.EnrollmentValidatorTest#hasCapacityWhenCourseIsFullMustReturnFalse`  
-**Автор звіту:** Олександр Кираківський (`Kyrakivskyi0`), **Інженер з тестування / SDET**  
+`ua.kpi.tzyapz.eduportal.GradeCalculatorTest#latePenaltyTwoDaysLinearDiscountMustBeEighty`  
+**Автор звіту:** Олександр Пархоменко (`Parkhomenko0`), **Тест-аналітик**  
 **Рецензент звіту:** Денис Бучинський (`Denchik`), **Скрам-майстер / Рецензент**  
-**Дата реєстрації:** 10 листопада 2026 року  
-**Мітка в трекері:** `module`, `bl-70`, `bva-error`, `bug-v1`  
+**Дата реєстрації:** 13 листопада 2026 року  
+**Мітки в трекері:** `module`, `severity:major`, `priority:P2`, `status:open`  
 
 ---
 
 ## 1. Рівні критичності та терміновості
 
 - **Severity (Критичність):** **Major**.  
-  *Обґрунтування:* Дефект веде до переповнення навчальних груп понад встановлену максимальну місткість (`capacity`), створюючи надмірне навантаження на інфраструктуру та порушуючи академічні санітарні норми кількості студентів на викладача.
-- **Priority (Пріоритет):** **High**.  
-  *Обґрунтування:* Необхідно виправити граничну перевірку у версії v2, оскільки цей метод є ключовим блокуючим фільтром підсистеми зарахування.
+  *Обґрунтування:* Дефект порушує регламент лінійного розрахунку академічних штрафів, завищуючи бал при несвоєчасній здачі завдань.
+- **Priority (Пріоритет):** **P2**.  
+  *Обґрунтування:* Потребує усунення у релізі v2 до розрахунку семестрових балів.
 
 ---
 
 ## 2. Тестове середовище (Environment)
 
-- **Модуль бізнес-логіки:** `code/modules/eduportal/v1` (jar: `eduportal-module-1.0.0.jar`)
-- **JDK:** Eclipse Temurin 17.0.11
-- **Середовище запуску:** Apache Maven 3.9.6, JUnit Jupiter 5.10.2
+- **Модуль бізнес-логіки:** `src/main/java/ua/kpi/tzyapz/eduportal` (v1.0.0)
+- **JDK:** Eclipse Temurin 17.0.21
+- **Середовище запуску:** Apache Maven 3.9.9, JUnit Jupiter 5.10.2
 - **Команда відтворення:**  
-  `mvn test -Dtest=EnrollmentValidatorTest#hasCapacityWhenCourseIsFullMustReturnFalse`
+  `mvn test -Dtest=GradeCalculatorTest#latePenaltyTwoDaysLinearDiscountMustBeEighty`
 
 ---
 
 ## 3. Кроки для відтворення (Steps to Reproduce)
 
-1. Створити об'єкт курсу з місткістю 25 осіб, на який вже зараховано рівно 25 осіб (вільних місць 0):
-   ```java
-   Course fullCourse = new Course("cs101", "key", 
-       LocalDate.now(), LocalDate.now().plusDays(10), 25, 25, null);
-   ```
-2. Створити екземпляр валідатора `EnrollmentValidator validator = new EnrollmentValidator();`.
-3. Викликати метод `boolean hasSeats = validator.hasCapacity(fullCourse);`.
-4. Перевірити отримане логічне значення.
+1. Створити екземпляр `GradeCalculator calc = new GradeCalculator();`.
+2. Викликати метод `double score = calc.latePenalty(100.0, 2);`.
+3. Перевірити повернений результат.
 
 ---
 
 ## 4. Результати
 
-- **Очікуваний результат (за специфікацією BL-70):**  
-  За правилом BL-70 умова наявності місць формулюється однозначно: *«зараховано менше за місткість»* (строга нерівність $enrolled < capacity$). Якщо $enrolled = 25$ і $capacity = 25$, вільних місць немає, метод повинен повернути `false`.
-- **Фактичний результат (на коді модуля v1):**  
-  Метод повертає `true`.  
-  *Surefire Failure Trace:*  
-  `org.opentest4j.AssertionFailedError: BL-70: якщо enrolled == capacity, вільних місць немає, очікується false ==> expected: <false> but was: <true>`
-
----
-
-## 5. Першопричина дефекту в коді (Root Cause Analysis)
-
-У вихідному файлі `src/main/java/ua/kpi/tzyapz/eduportal/EnrollmentValidator.java` на рядку 42–44 реалізовано:
-```java
-public boolean hasCapacity(Course course) {
-    return course.enrolled() <= course.capacity();
-}
-```
-**Аналіз:** Класична помилка граничного аналізу (Boundary / Off-by-one error): використано оператор `<=` замість `<`, що дозволяє зарахування ще одного (26-го) студента на курс із місткістю 25 осіб.
-
----
-
-## 6. Рекомендоване виправлення для версії v2
-
-```java
-public boolean hasCapacity(Course course) {
-    return course.enrolled() < course.capacity();
-}
-```
+- **Очікуваний результат:** `80.00` балів ($100 \times (1 - 0.20)$).
+- **Фактичний результат у v1:** `81.00` бал ($100 \times 0.9^2$). Тест падає з `AssertionFailedError: expected: <80.0> but was: <81.0>`.

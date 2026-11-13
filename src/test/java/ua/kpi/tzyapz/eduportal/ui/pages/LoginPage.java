@@ -36,7 +36,7 @@ public class LoginPage extends BasePage {
         type(usernameInput, username);
         type(passwordInput, password);
         click(loginButton);
-        wait.until(d -> !d.getCurrentUrl().contains("/login/index.php"));
+        wait.until(d -> !d.getCurrentUrl().contains("/login/index.php") || isElementPresent(By.cssSelector(".usermenu, .userbutton, .primary-navigation")));
         return new DashboardPage(driver);
     }
 
